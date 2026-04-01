@@ -56,4 +56,4 @@ for test_start in range(0, len(test_features), CHUNK_SIZE):
 
 print(f"Total time taken: {time.time() - time_start} seconds")
 
-classified_results.to_pickle("mnist_classified_results.pkl")
+classified_results.to_pickle("mnist_nn_classified_results.pkl")

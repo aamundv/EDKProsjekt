@@ -66,4 +66,4 @@ classified_results = pd.concat(result_chunks, ignore_index=True)
 print(f"Total time taken: {time.time() - time_start} seconds")
 print(f"Accuracy: {classified_results['correctly_classified'].mean():.4f}")
 
-classified_results.to_pickle("mnist_clustered_classified_results.pkl")
+classified_results.to_pickle("mnist_kmeans_classified_results.pkl")

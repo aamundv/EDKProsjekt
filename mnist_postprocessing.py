@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.metrics import ConfusionMatrixDisplay
 
-classified_results = pd.read_pickle("mnist_clustered_classified_results.pkl")
+classified_results = pd.read_pickle("mnist_kmeans_classified_results.pkl")
 test_data = pd.read_pickle("MNIST_files/mnist_test.pkl")
 
 print(classified_results.head())
@@ -13,7 +13,9 @@ confusion_mat = ConfusionMatrixDisplay.from_predictions(
 )
 confusion_mat.figure_.suptitle("Confusion Matrix for MNIST Classification")
 confusion_mat.plot()
-plt.show()
+
+error_rate = 1 - classified_results["correctly_classified"].mean()
+print(f"Overall error rate: {error_rate:.4f}")
 
 for element in classified_results.itertuples():
     if not element.correctly_classified:
