@@ -1,7 +1,8 @@
 import pandas as pd
 import numpy as np
-import plotly.graph_objects as go
 from sklearn.metrics import confusion_matrix
+
+# Compares Iris feature subsets by training the classifier on two train/test split variants.
 
 header = ["sepal length in cm", "sepal width in cm", "petal length in cm", "petal width in cm", "class"]
 
@@ -75,7 +76,7 @@ ranked_features = ["sepal width in cm", "sepal length in cm", "petal length in c
 
 results_df = pd.DataFrame(columns=["Features", "Training Set", "Training Accuracy", "Confusion Matrix"])
 
-learning_rate = 0.0017
+learning_rate = 0.008
 features_to_remove = []
 
 for element in ranked_features:
@@ -83,12 +84,12 @@ for element in ranked_features:
     testing_df = testing_df_1.drop(columns=features_to_remove)
 
     weights = train(training_df, learning_rate, iterations=10000)
-    training_accuracy, confusion_mat = evaluate_accuracy(training_df, weights)
+    test_accuracy, confusion_mat = evaluate_accuracy(testing_df, weights)
 
     new_results_df = pd.DataFrame({
         "Features": ", ".join(training_df.columns[:-1]),
         "Training Set": "Set 1",
-        "Training Accuracy": training_accuracy,
+        "Test Accuracy": test_accuracy,
         "Confusion Matrix": [confusion_mat]
     })
     results_df = pd.concat([results_df, new_results_df], ignore_index=True)
@@ -97,20 +98,18 @@ for element in ranked_features:
     testing_df = testing_df_2.drop(columns=features_to_remove)
 
     weights = train(training_df, learning_rate, iterations=10000)
-    training_accuracy, confusion_mat = evaluate_accuracy(training_df, weights)
+    test_accuracy, confusion_mat = evaluate_accuracy(testing_df, weights)
     
     new_results_df = pd.DataFrame({
         "Features": ", ".join(training_df.columns[:-1]),
         "Training Set": "Set 2",
-        "Training Accuracy": training_accuracy,
+        "Test Accuracy": test_accuracy,
         "Confusion Matrix": [confusion_mat]
     })
     results_df = pd.concat([results_df, new_results_df], ignore_index=True)
 
     features_to_remove.append(element)
 
-print(results_df)
-
-results_output_file = "results_df.pkl"
+results_output_file = "iris_2_results_df.pkl"
 results_df.to_pickle(results_output_file)
 print(f"Saved results to {results_output_file}")

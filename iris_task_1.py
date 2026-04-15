@@ -3,15 +3,21 @@ import numpy as np
 import plotly.graph_objects as go
 from sklearn.metrics import confusion_matrix
 
+# Trains and evaluate an Iris linear classifier with two different train/test splits
+# Also has code to perform a grid search using test accuracy to select the best learning rate
+
+
 header = ["sepal length in cm", "sepal width in cm", "petal length in cm", "petal width in cm", "class"]
 
 iris_df = pd.read_csv("iris_files/iris.data", names=header, header=None)
 
-#training_df = iris_df.groupby("class", group_keys=False).head(30)
-#testing_df = iris_df.groupby("class", group_keys=False).tail(20)
+training_df_1 = iris_df.groupby("class", group_keys=False).head(30)
+testing_df_1 = iris_df.groupby("class", group_keys=False).tail(20)
+data_split_1 = {"training": training_df_1, "testing": testing_df_1}
 
-training_df = iris_df.groupby("class", group_keys=False).tail(30)
-testing_df = iris_df.groupby("class", group_keys=False).head(20)
+training_df_2 = iris_df.groupby("class", group_keys=False).tail(30)
+testing_df_2 = iris_df.groupby("class", group_keys=False).head(20)
+data_split_2 = {"training": training_df_2, "testing": testing_df_2}
 
 def sigmoid(x):
   return 1 / (1 + np.exp(-x))
@@ -72,7 +78,7 @@ def evaluate_accuracy(samples, weights):
             correct_predictions += 1
     return correct_predictions / len(samples)
 
-def learning_rate_sweep(train_samples, test_samples, train_iterations=200, num_rates=12):
+def learning_rate_grid_search(train_samples, test_samples, train_iterations=200, num_rates=12):
     learning_rates = np.logspace(-4, 0, num=num_rates)
     accuracies = []
 
@@ -83,8 +89,8 @@ def learning_rate_sweep(train_samples, test_samples, train_iterations=200, num_r
 
     return learning_rates, np.array(accuracies)
 
-def perform_sweep():
-    learning_rates, accuracies = learning_rate_sweep(training_df, testing_df, train_iterations=1000, num_rates=50)
+def perform_grid_search(data_split=data_split_1):
+    learning_rates, accuracies = learning_rate_grid_search(data_split["training"], data_split["testing"], train_iterations=1000, num_rates=50)
 
     fig = go.Figure(
         data=[
@@ -111,17 +117,21 @@ def perform_sweep():
     print(f"Best learning rate: {learning_rates[best_idx]:.6f}, Accuracy: {accuracies[best_idx]:.4f}")
     return learning_rates[best_idx]
 
-def test_classification(learning_rate):
-    weights = train(training_df, learning_rate, 1000)
-    for _, row in testing_df.iterrows():
+def test_classification(learning_rate, data_split):
+    weights = train(data_split["training"], learning_rate, 1000)
+    for _, row in data_split["testing"].iterrows():
         predicted_class = classify(row, weights)
         print(f"Predicted: {predicted_class}, Actual: {row['class']}")
-    accuracy = evaluate_accuracy(testing_df, weights)
+    accuracy = evaluate_accuracy(data_split["testing"], weights)
     print(f"Accuracy with learning rate {learning_rate:.6f}: {accuracy:.4f}")
-    confusion = confusion_matrix(testing_df["class"], [classify(row, weights) for _, row in testing_df.iterrows()])
+    confusion = confusion_matrix(data_split["testing"]["class"], [classify(row, weights) for _, row in data_split["testing"].iterrows()])
     print("Confusion Matrix:")
     print(confusion)
     
 
-best_learning_rate = perform_sweep()
-test_classification(best_learning_rate)
+#best_learning_rate = perform_grid_search()
+best_learning_rate = 0.008
+
+test_classification(best_learning_rate, data_split_1)
+
+test_classification(best_learning_rate, data_split_2)

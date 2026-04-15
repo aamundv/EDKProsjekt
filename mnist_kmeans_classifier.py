@@ -4,6 +4,8 @@ import pandas as pd
 import numpy as np
 import time
 
+# K-means classifier for MNIST, saves the classification results.
+
 CHUNK_SIZE = 1000
 M = 64
 

@@ -3,6 +3,9 @@ import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
+# Plots Iris class histograms per feature and rank features by class-overlap.
+
+
 header = ["sepal length in cm", "sepal width in cm", "petal length in cm", "petal width in cm", "class"]
 iris_df = pd.read_csv("iris_files/iris.data", names=header, header=None)
 

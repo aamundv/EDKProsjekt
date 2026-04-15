@@ -1,3 +1,4 @@
+# Purpose: Classify MNIST with chunked 1-nearest-neighbor and save prediction results.
 import pandas as pd
 import numpy as np
 from scipy.spatial import distance

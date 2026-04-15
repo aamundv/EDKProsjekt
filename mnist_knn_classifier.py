@@ -3,6 +3,8 @@ import numpy as np
 from scipy.spatial import distance
 import time
 
+# K-NN classifier for MNIST, saves the classification results
+
 CHUNK_SIZE = 1000
 
 test_data = pd.read_pickle("MNIST_files/mnist_test.pkl")
