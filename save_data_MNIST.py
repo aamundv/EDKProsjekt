@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 # Purpose: Convert MNIST binary image/label files into pandas pickle datasets and metadata.
+
+# Disclaimer: This script was created by asking github copilot to translate the original MATLAB read09.m script into Python
+# It was manually validated afterwards to ensure the output was correct.
+
 """Convert MNIST binary files into pandas-friendly serialized files.
 
 This script mirrors the behavior of MNIST_files/read09.m, but uses
