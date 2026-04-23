@@ -34,11 +34,8 @@ templates = kmeans.cluster_centers_.astype(np.float32)
 template_labels = np.zeros(M, dtype=np.int64)
 for cluster_idx in range(M):
 	cluster_member_labels = train_labels[cluster_ids == cluster_idx]
-	if cluster_member_labels.size == 0:
-		# Fallback for empty clusters (rare): use most common global class.
-		template_labels[cluster_idx] = np.bincount(train_labels).argmax()
-	else:
-		template_labels[cluster_idx] = np.bincount(cluster_member_labels).argmax()
+
+	template_labels[cluster_idx] = np.bincount(cluster_member_labels).argmax()
 
 print(f"Finished clustering and template creation after {time.time() - time_start} seconds. Starting classification of test set...")
 
