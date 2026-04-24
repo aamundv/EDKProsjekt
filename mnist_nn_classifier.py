@@ -9,7 +9,16 @@ CHUNK_SIZE = 1000
 test_data = pd.read_pickle("MNIST_files/mnist_test.pkl")
 train_data = pd.read_pickle("MNIST_files/mnist_train.pkl")
 
-print(test_data.head())
+def normalize_pixel_features(features: np.ndarray):
+	return features / 255.0
+
+train_labels = train_data["label"].to_numpy()
+train_features = train_data.drop(columns=["label"]).to_numpy(dtype=np.float32)
+test_labels = test_data["label"].to_numpy()
+test_features = test_data.drop(columns=["label"]).to_numpy(dtype=np.float32)
+
+train_features = normalize_pixel_features(train_features)
+test_features = normalize_pixel_features(test_features)
 
 def nearest_neighbor_chunked(train_features, train_labels, test_chunk, chunk_size=CHUNK_SIZE):
     # test_chunk shape: (num_test_samples, num_features)
@@ -31,12 +40,6 @@ def nearest_neighbor_chunked(train_features, train_labels, test_chunk, chunk_siz
         best_labels[improved] = label_chunk[best_local_idx[improved]]
 
     return best_labels
-
-
-train_labels = train_data["label"].to_numpy()
-train_features = train_data.drop(columns=["label"]).to_numpy(dtype=np.float32)
-test_labels = test_data["label"].to_numpy()
-test_features = test_data.drop(columns=["label"]).to_numpy(dtype=np.float32)
 
 time_start = time.time()
 

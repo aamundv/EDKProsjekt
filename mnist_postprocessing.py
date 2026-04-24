@@ -7,9 +7,9 @@ from sklearn.metrics import ConfusionMatrixDisplay
 # Calculates the overall error rate and prints it 
 # Plots some misclassifies and some correctly classified examples with their true and predicted labels.
 
-classified_results = pd.read_pickle("mnist_nn_classified_results.pkl")
+# classified_results = pd.read_pickle("mnist_nn_classified_results.pkl")
 # classified_results = pd.read_pickle("mnist_kmeans_classified_results.pkl")
-# classified_results = pd.read_pickle("mnist_knn_classified_results.pkl")
+classified_results = pd.read_pickle("mnist_knn_classified_results.pkl")
 
 test_data = pd.read_pickle("MNIST_files/mnist_test.pkl")
 
@@ -19,7 +19,7 @@ confusion_mat = ConfusionMatrixDisplay.from_predictions(
     classified_results["true_label"].astype(int),
     classified_results["predicted_label"].astype(int),
 )
-confusion_mat.figure_.suptitle("Confusion Matrix for MNIST Classification")
+confusion_mat.figure_.suptitle("Confusion Matrix for MNIST Classification using a KNN Classifier")
 plt.show()
 
 error_rate = 1 - classified_results["correctly_classified"].mean()

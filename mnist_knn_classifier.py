@@ -10,7 +10,16 @@ CHUNK_SIZE = 1000
 test_data = pd.read_pickle("MNIST_files/mnist_test.pkl")
 train_data = pd.read_pickle("MNIST_files/mnist_train.pkl")
 
-print(test_data.head())
+def normalize_pixel_features(features: np.ndarray):
+	return features / 255.0
+
+train_labels = train_data["label"].to_numpy(dtype=np.int64)
+train_features = train_data.drop(columns=["label"]).to_numpy(dtype=np.float32)
+test_labels = test_data["label"].to_numpy(dtype=np.int64)
+test_features = test_data.drop(columns=["label"]).to_numpy(dtype=np.float32)
+
+train_features = normalize_pixel_features(train_features)
+test_features = normalize_pixel_features(test_features)
 
 def k_nearest_neighbor_chunked(train_features, train_labels, test_chunk, k=1,  chunk_size=CHUNK_SIZE):
     # test_chunk shape: (num_test_samples, num_features)
@@ -46,12 +55,6 @@ def k_nearest_neighbor_chunked(train_features, train_labels, test_chunk, k=1,  c
         predicted_labels[i] = np.bincount(neighbor_labels).argmax()
 
     return predicted_labels
-
-
-train_labels = train_data["label"].to_numpy()
-train_features = train_data.drop(columns=["label"]).to_numpy(dtype=np.float32)
-test_labels = test_data["label"].to_numpy()
-test_features = test_data.drop(columns=["label"]).to_numpy(dtype=np.float32)
 
 time_start = time.time()
 

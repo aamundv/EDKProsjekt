@@ -13,16 +13,21 @@ test_data = pd.read_pickle("MNIST_files/mnist_test.pkl")
 train_data = pd.read_pickle("MNIST_files/mnist_train.pkl")
 
 
-def nearest_template_chunked(template_features, template_labels, test_chunk):
-	distances = distance.cdist(template_features, test_chunk, metric="euclidean")
-	best_template_idx = np.argmin(distances, axis=0)
-	return template_labels[best_template_idx]
-
+def normalize_pixel_features(features: np.ndarray) -> np.ndarray:
+	return features / 255.0
 
 train_labels = train_data["label"].to_numpy(dtype=np.int64)
 train_features = train_data.drop(columns=["label"]).to_numpy(dtype=np.float32)
 test_labels = test_data["label"].to_numpy(dtype=np.int64)
 test_features = test_data.drop(columns=["label"]).to_numpy(dtype=np.float32)
+
+train_features = normalize_pixel_features(train_features)
+test_features = normalize_pixel_features(test_features)
+
+def nearest_template_chunked(template_features, template_labels, test_chunk):
+	distances = distance.cdist(template_features, test_chunk, metric="euclidean")
+	best_template_idx = np.argmin(distances, axis=0)
+	return template_labels[best_template_idx]
 
 time_start = time.time()
 
