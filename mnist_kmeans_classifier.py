@@ -31,7 +31,7 @@ def nearest_template_chunked(template_features, template_labels, test_chunk):
 
 time_start = time.time()
 
-kmeans = KMeans(n_clusters=M, random_state=42)
+kmeans = KMeans(n_clusters=M, random_state=67)
 cluster_ids = kmeans.fit_predict(train_features)
 templates = kmeans.cluster_centers_.astype(np.float32)
 
