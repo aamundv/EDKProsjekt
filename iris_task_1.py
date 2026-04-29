@@ -118,7 +118,7 @@ def perform_grid_search(data_split=data_split_1):
     return learning_rates[best_idx]
 
 def test_classification(learning_rate, data_split):
-    weights = train(data_split["training"], learning_rate, 1000)
+    weights = train(data_split["training"], learning_rate, 10000)
     for _, row in data_split["testing"].iterrows():
         predicted_class = classify(row, weights)
         print(f"Predicted: {predicted_class}, Actual: {row['class']}")
