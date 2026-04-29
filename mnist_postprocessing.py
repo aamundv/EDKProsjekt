@@ -25,19 +25,19 @@ plt.show()
 error_rate = 1 - classified_results["correctly_classified"].mean()
 print(f"Overall error rate: {error_rate:.4f}")
 
-correctly_plotted_counter = 0
-misclassified_plotted_counter = 0
+correctly_plotted_counter = 5
+misclassified_plotted_numbers = [1,2,3,4,5]
 for element in classified_results.itertuples():
     if element.correctly_classified and correctly_plotted_counter < 5:
         plt.imshow(test_data.iloc[element.Index].drop("label").to_numpy().reshape(28, 28), cmap="gray")
         plt.title(f"True label: {element.true_label}, Predicted label: {element.predicted_label}")
         plt.show()
         correctly_plotted_counter += 1
-    elif not element.correctly_classified and misclassified_plotted_counter < 5:
+    elif not element.correctly_classified and element.true_label in misclassified_plotted_numbers:
         plt.imshow(test_data.iloc[element.Index].drop("label").to_numpy().reshape(28, 28), cmap="gray")
         plt.title(f"True label: {element.true_label}, Predicted label: {element.predicted_label}")
         plt.show()
-        misclassified_plotted_counter += 1
-    if correctly_plotted_counter >= 5 and misclassified_plotted_counter >= 5:
+        misclassified_plotted_numbers.pop(misclassified_plotted_numbers.index(element.true_label))
+    if correctly_plotted_counter >= 5 and not misclassified_plotted_numbers:
         break
     
