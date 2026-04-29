@@ -93,6 +93,7 @@ for element in ranked_features:
         "Confusion Matrix": [confusion_mat]
     })
     results_df = pd.concat([results_df, new_results_df], ignore_index=True)
+    print(f"Completed training and evaluation 1 with features: {', '.join(training_df.columns[:-1])}")
     
     training_df = training_df_2.drop(columns=features_to_remove)
     testing_df = testing_df_2.drop(columns=features_to_remove)
@@ -107,6 +108,7 @@ for element in ranked_features:
         "Confusion Matrix": [confusion_mat]
     })
     results_df = pd.concat([results_df, new_results_df], ignore_index=True)
+    print(f"Completed training and evaluation 2 with features: {', '.join(training_df.columns[:-1])}")
 
     features_to_remove.append(element)
 
