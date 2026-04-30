@@ -64,6 +64,7 @@ for i, feature_name in enumerate(features):
 				name=class_name,
 				opacity=0.65,
 				showlegend=(i == 0),
+				marker_color={"Iris-setosa": "#7FBEE9", "Iris-versicolor": "#FF825D", "Iris-virginica": "#7EE3B0"}.get(class_name, "gray"),
 			),
 			row=row,
 			col=col,
